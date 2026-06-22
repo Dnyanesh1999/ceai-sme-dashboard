@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SignalStack Engagement Dashboard</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --ink: #18202f;
+      --muted: #637083;
+      --line: #dfe4ec;
+      --blue: #246bfe;
+      --green: #18a058;
+      --amber: #c47a00;
+      --red: #d64545;
+      --shadow: 0 18px 45px rgba(23, 32, 49, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 28px 36px;
+      background: #101827;
+      color: #fff;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #4fd1c5, #246bfe);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+    h1 { margin: 0; font-size: 26px; line-height: 1.1; }
+    header p { margin: 4px 0 0; color: #aeb8c8; }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 12px;
+      padding: 22px 36px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+    label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    select {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+    main { padding: 28px 36px 42px; max-width: 1320px; margin: 0 auto; }
+    .grid { display: grid; gap: 18px; }
+    .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .metric-label { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .metric-value { font-size: 34px; font-weight: 800; margin: 8px 0 6px; }
+    .metric-note { font-size: 13px; color: var(--muted); }
+    .good { color: var(--green); }
+    .warn { color: var(--amber); }
+    .bad { color: var(--red); }
+    .two-col { grid-template-columns: 1.15fr .85fr; margin-top: 18px; }
+    h2 { margin: 0 0 16px; font-size: 18px; }
+    .bar-row { display: grid; grid-template-columns: 160px 1fr 54px; gap: 12px; align-items: center; margin: 14px 0; }
+    .bar-track { height: 12px; background: #edf1f6; border-radius: 999px; overflow: hidden; }
+    .bar { height: 100%; background: var(--blue); border-radius: inherit; }
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcff;
+    }
+    .step strong { display: block; font-size: 22px; margin-top: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    .pill { display: inline-flex; padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #eef3ff; color: var(--blue); }
+    .risk { background: #fff0f0; color: var(--red); }
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: end;
+      gap: 10px;
+      height: 210px;
+      border-bottom: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .col { display: grid; align-items: end; gap: 8px; height: 100%; }
+    .col div { background: linear-gradient(180deg, #246bfe, #4fd1c5); border-radius: 6px 6px 0 0; min-height: 18px; }
+    .col span { font-size: 12px; color: var(--muted); text-align: center; }
+    .footer-note { margin-top: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 900px) {
+      header, .filters { grid-template-columns: 1fr; padding: 22px; }
+      header { align-items: flex-start; }
+      .kpis, .two-col, .journey { grid-template-columns: 1fr; }
+      main { padding: 20px; }
+      .bar-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="mark">S</div>
+      <div>
+        <h1>SignalStack Customer Engagement Dashboard</h1>
+        <p>B2B SaaS engagement, journey, communication, and retention signals.</p>
+      </div>
+    </div>
+    <div class="pill">GitHub Pages artifact</div>
+  </header>
+
+  <section class="filters">
+    <label>Date range
+      <select id="dateRange">
+        <option value="30">Last 30 days</option>
+        <option value="60">Last 60 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+    </label>
+    <label>Customer segment
+      <select id="segment">
+        <option value="all">All segments</option>
+        <option value="startup">Startup</option>
+        <option value="scaleup">Scale-up</option>
+        <option value="enterprise">Enterprise</option>
+      </select>
+    </label>
+    <label>User cohort
+      <select id="cohort">
+        <option value="all">All cohorts</option>
+        <option value="new">New users</option>
+        <option value="expanding">Expanding users</option>
+        <option value="atrisk">At-risk users</option>
+      </select>
+    </label>
+  </section>
+
+  <main>
+    <section class="grid kpis">
+      <article class="card">
+        <div class="metric-label">DAU / MAU</div>
+        <div class="metric-value" id="dau">42%</div>
+        <div class="metric-note good">+6 pts vs previous period</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Avg session duration</div>
+        <div class="metric-value" id="session">14m</div>
+        <div class="metric-note">Target: 12 minutes</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Activation rate</div>
+        <div class="metric-value" id="activation">68%</div>
+        <div class="metric-note good">Time-to-value improving</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">At-risk accounts</div>
+        <div class="metric-value bad" id="risk">18</div>
+        <div class="metric-note">Low login frequency or support escalation</div>
+      </article>
+    </section>
+
+    <section class="grid two-col">
+      <article class="card">
+        <h2>Feature Adoption Rates</h2>
+        <div class="bar-row"><span>Automation builder</span><div class="bar-track"><div class="bar" id="bar1" style="width:74%"></div></div><strong id="adopt1">74%</strong></div>
+        <div class="bar-row"><span>Customer health score</span><div class="bar-track"><div class="bar" id="bar2" style="width:62%"></div></div><strong id="adopt2">62%</strong></div>
+        <div class="bar-row"><span>Journey alerts</span><div class="bar-track"><div class="bar" id="bar3" style="width:47%"></div></div><strong id="adopt3">47%</strong></div>
+        <div class="bar-row"><span>Campaign reports</span><div class="bar-track"><div class="bar" id="bar4" style="width:58%"></div></div><strong id="adopt4">58%</strong></div>
+      </article>
+
+      <article class="card">
+        <h2>Support Ticket Trend</h2>
+        <div class="chart" id="ticketChart"></div>
+        <p class="footer-note">Support trend is used as a friction signal. Rising tickets plus falling login frequency flags at-risk accounts.</p>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>Customer Journey</h2>
+      <div class="journey">
+        <div class="step">Signup to first login<strong id="j1">82%</strong><span class="metric-note">Activation entry</span></div>
+        <div class="step">Time-to-value under 7 days<strong id="j2">61%</strong><span class="metric-note">Core milestone</span></div>
+        <div class="step">First automation created<strong id="j3">54%</strong><span class="metric-note">Feature habit</span></div>
+        <div class="step">Milestone completion<strong id="j4">49%</strong><span class="metric-note">Retention predictor</span></div>
+      </div>
+    </section>
+
+    <section class="grid two-col">
+      <article class="card">
+        <h2>Communication Effectiveness</h2>
+        <table>
+          <thead><tr><th>Channel</th><th>Open / CTR</th><th>Trend</th><th>Action</th></tr></thead>
+          <tbody id="comms"></tbody>
+        </table>
+      </article>
+      <article class="card">
+        <h2>Retention Signals</h2>
+        <table>
+          <thead><tr><th>Account</th><th>Login frequency</th><th>Engagement score</th><th>Status</th></tr></thead>
+          <tbody id="accounts"></tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const baselines = {
+      all: { dau: 42, session: 14, activation: 68, risk: 18, adopt: [74,62,47,58], journey: [82,61,54,49], tickets: [42,38,34,37,31,28,24] },
+      startup: { dau: 51, session: 16, activation: 74, risk: 6, adopt: [81,68,52,61], journey: [88,66,59,52], tickets: [14,13,11,10,9,8,7] },
+      scaleup: { dau: 39, session: 13, activation: 65, risk: 8, adopt: [72,61,46,57], journey: [80,60,53,47], tickets: [18,16,15,17,14,13,11] },
+      enterprise: { dau: 31, session: 11, activation: 58, risk: 4, adopt: [63,55,39,49], journey: [72,54,46,41], tickets: [10,9,8,10,8,7,6] }
+    };
+    const accounts = [
+      ["Atlas CRM", "Daily", 88, "Healthy"],
+      ["Northline Ops", "3x weekly", 71, "Watch"],
+      ["Cedar Finance", "Weekly", 44, "At risk"],
+      ["RidgeLab", "2x monthly", 31, "At risk"]
+    ];
+    const comms = [
+      ["Onboarding email", "48% open", "+5%", "Keep"],
+      ["Feature nudge", "11% CTR", "-2%", "Rewrite"],
+      ["In-app milestone", "18% CTR", "+4%", "Expand"],
+      ["Support follow-up", "62% open", "+8%", "Automate"]
+    ];
+    function setText(id, value) { document.getElementById(id).textContent = value; }
+    function render() {
+      const data = baselines[document.getElementById("segment").value];
+      const cohort = document.getElementById("cohort").value;
+      const riskBoost = cohort === "atrisk" ? 9 : cohort === "new" ? -3 : 0;
+      setText("dau", data.dau + "%");
+      setText("session", data.session + "m");
+      setText("activation", data.activation + "%");
+      setText("risk", Math.max(0, data.risk + riskBoost));
+      data.adopt.forEach((v, i) => {
+        const bar = document.getElementById("bar" + (i + 1));
+        const label = document.getElementById("adopt" + (i + 1));
+        bar.style.width = v + "%";
+        label.textContent = v + "%";
+      });
+      data.journey.forEach((v, i) => setText("j" + (i + 1), v + "%"));
+      document.getElementById("ticketChart").innerHTML = data.tickets.map((v, i) => {
+        const h = Math.max(18, v * 3);
+        return `<div class="col"><div style="height:${h}px"></div><span>W${i + 1}</span></div>`;
+      }).join("");
+      document.getElementById("comms").innerHTML = comms.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><span class="pill">${r[3]}</span></td></tr>`).join("");
+      document.getElementById("accounts").innerHTML = accounts.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><span class="pill ${r[3] === "At risk" ? "risk" : ""}">${r[3]}</span></td></tr>`).join("");
+    }
+    document.querySelectorAll("select").forEach(el => el.addEventListener("change", render));
+    render();
+  </script>
+</body>
+</html>

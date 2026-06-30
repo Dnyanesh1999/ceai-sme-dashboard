@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ReelRevive customer support for tape formats, packaging, pricing, order tracking and privacy.">
+    <meta name="theme-color" content="#ffffff">
+    <title>ReelRevive Support</title>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="ReelRevive home">
+          <span class="brand-mark" aria-hidden="true"><i data-lucide="disc-3"></i></span>
+          <span class="brand-name">ReelRevive</span>
+        </a>
+
+        <button class="human-link" id="humanTop" type="button">
+          <i data-lucide="headphones"></i>
+          <span>Talk to a person</span>
+        </button>
+      </header>
+
+      <aside class="topic-rail" id="topicRail" aria-label="Help topics">
+        <div class="rail-heading">
+          <h1>Get help</h1>
+          <button class="rail-close icon-button" id="railClose" type="button" aria-label="Close topics" title="Close topics">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <nav class="topic-list">
+          <button class="topic" type="button" data-topic="identify">
+            <i data-lucide="scan-search"></i><span>Identify a tape</span><i data-lucide="chevron-right"></i>
+          </button>
+          <button class="topic active" type="button" data-topic="packaging">
+            <i data-lucide="package"></i><span>Packaging</span><i data-lucide="chevron-right"></i>
+          </button>
+          <button class="topic" type="button" data-topic="pricing">
+            <i data-lucide="tag"></i><span>Pricing</span><i data-lucide="chevron-right"></i>
+          </button>
+          <button class="topic" type="button" data-topic="tracking">
+            <i data-lucide="truck"></i><span>Track an order</span><i data-lucide="chevron-right"></i>
+          </button>
+          <button class="topic" type="button" data-topic="privacy">
+            <i data-lucide="shield-check"></i><span>Privacy</span><i data-lucide="chevron-right"></i>
+          </button>
+        </nav>
+
+        <button class="rail-human" id="humanRail" type="button">
+          <i data-lucide="headphones"></i>
+          <span><strong>Human support</strong><small>For damaged or sensitive media</small></span>
+          <i data-lucide="arrow-up-right"></i>
+        </button>
+      </aside>
+
+      <main class="chat-area">
+        <section class="chat-panel" aria-labelledby="assistantTitle">
+          <header class="chat-header">
+            <button class="menu-button icon-button" id="menuButton" type="button" aria-label="Open help topics" title="Open help topics">
+              <i data-lucide="menu"></i>
+            </button>
+            <span class="assistant-mark" aria-hidden="true"><i data-lucide="disc-3"></i></span>
+            <div>
+              <h2 id="assistantTitle">ReelRevive Assistant</h2>
+              <p><span class="status-dot"></span><span id="connectionStatus">Online</span></p>
+            </div>
+          </header>
+
+          <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Conversation">
+            <article class="message assistant-message">
+              <div class="message-avatar" aria-hidden="true"><i data-lucide="disc-3"></i></div>
+              <div class="message-bubble">
+                <p>Hello. I can help with tape formats, packaging, pricing and order tracking. What would you like to know?</p>
+              </div>
+            </article>
+          </div>
+
+          <form class="composer" id="chatForm">
+            <button class="icon-button reset-button" id="resetButton" type="button" aria-label="Start over" title="Start over">
+              <i data-lucide="rotate-ccw"></i>
+            </button>
+            <label class="sr-only" for="messageInput">Message</label>
+            <textarea id="messageInput" rows="1" maxlength="800" placeholder="Ask about your tapes or order" required></textarea>
+            <button class="send-button" id="sendButton" type="submit" aria-label="Send message" title="Send message">
+              <i data-lucide="arrow-up"></i>
+            </button>
+          </form>
+
+          <p class="trust-note"><i data-lucide="info"></i>AI-assisted guidance. Complex or sensitive cases are passed to our team.</p>
+        </section>
+      </main>
+    </div>
+
+    <div class="backdrop" id="backdrop" hidden></div>
+
+    <dialog class="handoff-dialog" id="handoffDialog">
+      <form method="dialog">
+        <div class="dialog-icon" aria-hidden="true"><i data-lucide="headphones"></i></div>
+        <h2>Human support requested</h2>
+        <p>A team member would continue this conversation for damaged media, privacy requests or order-specific issues.</p>
+        <div class="dialog-actions">
+          <button class="secondary-button" value="cancel">Cancel</button>
+          <button class="primary-button" id="confirmHandoff" value="confirm">Request support</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
+

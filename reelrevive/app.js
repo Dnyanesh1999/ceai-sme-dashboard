@@ -69,16 +69,22 @@ async function requestReply(userMessage) {
   }
 
   try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: conversation.slice(-10) })
-    });
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conversation.slice(-10) })
+      });
 
-    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
-    const data = await response.json();
-    if (!data.reply) throw new Error("Empty assistant response");
-    return data;
+      if (response.ok) {
+        const data = await response.json();
+        if (data.reply) return data;
+      }
+
+      if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 1200));
+    }
+
+    throw new Error("Free AI providers are temporarily unavailable");
   } catch (error) {
     console.warn("AI service unavailable; using verified local guidance.", error);
     return { reply: localReply(userMessage), source: "local" };
